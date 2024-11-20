@@ -665,7 +665,7 @@ MCSquare::CtrlStats::CtrlStats(MCSquare &_ctrl)
     ADD_STAT(srcWritesBlocked, statistics::units::Count::get(),
              "Number of writes to src blocked"),
     ADD_STAT(memElideBlockedCTTFull, statistics::units::Count::get(),
-             "Number of mem elides blocked due to CTT being full")
+             "Number of mem elides blocked due to CTT being full"),
     ADD_STAT(numMisalignedReqs, statistics::units::Count::get(), // ARYA : Displaying the final statistics
              "Number of blocks monitored by CTT that are misaligned")
              
