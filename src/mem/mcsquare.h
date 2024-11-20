@@ -210,6 +210,7 @@ class MCSquare : public SimObject {
         statistics::Scalar srcWriteSizeBounce;
         statistics::Scalar srcWritesBlocked;
         statistics::Scalar memElideBlockedCTTFull;
+	statistics::Distribution numMisalignedReqs; // ARYA : Adding our distribution statistic
     } stats;
 };
 
