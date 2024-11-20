@@ -203,13 +203,12 @@ launch_protobuf:
 	wait;
 	$(MAKE) -s extract_protobuf > ${RESULTS}/figure_20.txt;
 
-launch_protobuf_ee748: 		// ARYA : Added this for running protobuf once
+launch_protobuf_ee748: 		# ARYA : Added this for running protobuf once
 	sudo ls; \
 	$(MAKE) compile_gem5; \
 	$(MAKE) single_launch_gem5 TEST=protobuf/protobuf-mc-4096-0.95 \
 			SCRIPT=./scripts/protobuf/protobuf-mc-run.sh CTT_FREE_SIZE=1 \
-			CTT_SIZE=4096 CTT_FRAC=0.95 CTT_LAT="979ps" & \
-	done; \
+			CTT_SIZE=4096 CTT_FRAC=0.95 CTT_LAT="979ps";\
 	wait;
 
 extract_protobuf:
