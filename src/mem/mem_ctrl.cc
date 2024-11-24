@@ -758,8 +758,12 @@ MemCtrl::recvTimingReq(PacketPtr pkt)
         return true;
     }*/
 
-    if(!isMCReq(pkt)) {
-        if(pkt->isWrite()) {
+    if(!isMCReq(pkt)) { 	
+	// ARYA : We run this section if the req is not:
+	// 1. MEM_ELIDE_REDIRECT_SRC : Some req went to another module and that CTT instructed it to come here
+	// 2. MEM_ELIDE_DEST_WB : This module contains a dest addr and now we are updating that addr.
+	// 3. MEM_ELIDE_WRITE_SRC : Straightforward in what it does
+        if(pkt->isWrite()) {	// ARYA : We won't enter this section with Dest Reads
             if(mcsquare->isDest(pkt)) {
                 bool weContain = false;
                 AddrRangeList addrList = getAddrRanges();
@@ -887,12 +891,12 @@ MemCtrl::recvTimingReq(PacketPtr pkt)
                 return true;
             }
         } else if(pkt->isRead()) {
-            if(mcsquare->isDest(pkt)) {
+            if(mcsquare->isDest(pkt)) {		// This deals with reads to destination
                 DPRINTF(MCSquare, "Found a read to dest %lx, applying elision penalty\n", pkt->getAddr());
-                pkt->req->_paddr_dest = pkt->getAddr();
-                mcsquare->bounceAddr(pkt);
+                pkt->req->_paddr_dest = pkt->getAddr();		// Updates the physical addr of the original request which gave birth to this.
+                mcsquare->bounceAddr(pkt);	// 
                 mcsquare->stats.destReadSizeCPU += pkt->getSize();
-                pkt->req->setFlags(Request::MEM_ELIDE_REDIRECT_SRC);
+                pkt->req->setFlags(Request::MEM_ELIDE_REDIRECT_SRC);	// ARYA : When we redirect the read, we make the packet "MEM_ELIDE_REDIRECT_SRC"
                 // Push pkt to redirected source
                 if(pkt->req->_paddr_dest != pkt->getAddr()) {
                     Tick response_time = curTick() + mcsquare->getCTTPenalty() + pkt->headerDelay;

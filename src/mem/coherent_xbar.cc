@@ -527,7 +527,7 @@ CoherentXBar::recvTimingResp(PacketPtr pkt, PortID mem_side_port_id)
         pkt->makeResponse();
     }*/
 
-    if(pkt->req->getFlags() & Request::MEM_ELIDE_REDIRECT_SRC) {
+    if(pkt->req->getFlags() & Request::MEM_ELIDE_REDIRECT_SRC) { // ARYA : We need to reduce the effects of this case. 
         if(pkt->isRead())
             pkt->cmd = pkt->makeReadCmd(pkt->req);
         else if(pkt->isWrite())
@@ -543,7 +543,8 @@ CoherentXBar::recvTimingResp(PacketPtr pkt, PortID mem_side_port_id)
         Tick old_header_delay = pkt->headerDelay;
 
         // a request sees the frontend and forward latency
-        Tick xbar_delay = (frontendLatency + forwardLatency) * clockPeriod();
+	// ARYA : The xbar_delay will NOT come into picture for SRC_REDIRECTS
+        Tick xbar_delay = 0; //(frontendLatency + forwardLatency) * clockPeriod();
 
         // set the packet header and payload delay
         calcPacketTiming(pkt, xbar_delay);

@@ -211,6 +211,14 @@ launch_protobuf_ee748: 		# ARYA : Added this for running protobuf once
 			CTT_SIZE=4096 CTT_FRAC=0.95 CTT_LAT="979ps";\
 	wait;
 
+launch_protobuf_ee748_LCC_CTT: 		# ARYA : Added this for running protobuf once with CTT at LLC
+	sudo ls; \
+	$(MAKE) compile_gem5; \
+	$(MAKE) single_launch_gem5 TEST=protobuf/protobuf-mc-4096-0.95 \
+			SCRIPT=./scripts/protobuf/protobuf-mc-run.sh CTT_FREE_SIZE=1 \
+			CTT_SIZE=4096 CTT_FRAC=0.95 CTT_LAT="0ps";\
+	wait;
+
 extract_protobuf:
 	python3 ./scripts/protobuf/protobuf-extract.py "${PB_CTT_SIZE}" "${PB_FLUSH_FRAC}" ${FIGURES}/figure_14.png
 
